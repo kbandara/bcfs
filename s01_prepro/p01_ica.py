@@ -1,10 +1,11 @@
 """
 =========================================================
-bCFS Preprocessing: Independent Component Analysis (ICA)
+bCFS Preprocessing in MNE-Python
 kav bandara, unimelb 2025
 =========================================================
 
-This script performs Independent Component Analysis (ICA) on EEG data from the bCFS project.
+This script performs Independent Component Analysis (ICA) on EEG/bCFS data. 
+
 It loads the raw EEG data, applies preprocessing steps such as filtering and resampling,
 and then runs ICA to identify and label components. The script generates visualizations of the ICA components
 and saves the results as PDF reports and figures.
@@ -81,9 +82,6 @@ def load_raw(subject_id):
     try:
         raw.set_montage('standard_1020')
     except ValueError as e:
-        # This will catch errors if some channels (like M1, M2, Nz) aren't in the montage
-        print(f"    -> Warning: Could not set montage for all channels. Error: {e}")
-        print("    -> This is expected for non-EEG channels. Continuing...")
 
     raw.resample(200, npad="auto") 
     #raw.filter(l_freq=1.0, h_freq=None)
@@ -94,15 +92,12 @@ def load_raw(subject_id):
 def run_ica(subject_id, threshold=0.95):
 
     """
-    ===========
-    05. Run ICA
-    ===========
 
-    Run Independent Component Analysis (ICA) on MEG (and optionally EEG data)
-
-    Generates ICA decompositions for EEG (if available), plots
+    Generates ICA decompositions for EEG, plots
     component timecourses and topographies, saves ICA solutions, and
-    generates PDF reports. Includes automatic ICA component labeling using MNE-ICLabel.
+    generates PDF reports. 
+    
+    Includes automatic ICA component labeling using MNE-ICLabel.
 
     Parameters
     ----------
@@ -113,18 +108,10 @@ def run_ica(subject_id, threshold=0.95):
         Threshold for automatic component exclusion. Defaults to 0.95.
 
     """
- 
-    # Call the function to load and preprocess the data
+
     raw = load_raw(subject_id)
     
-    # FIT ICA
-    # Prepare data for fitting: 1-100Hz bandpass filter, but NO average reference.
     raw_for_ica_fit = raw.copy().filter(l_freq=1.0, h_freq=None)
-    
- 
-    # =========================
-    #            ICA  
-    # =========================
     
     ica = ICA(
         n_components=0.99, 
@@ -262,19 +249,8 @@ def run_ica(subject_id, threshold=0.95):
     fname_report = op.join(pdf_root, f"{subject_id}_ICA-report.pdf")
     pdf.output(fname_report)
     print(f"--- Report saved to {fname_report} ---")  
-  
 
-    """
-    ============
-    06. Now apply ICA
-    ============
-
-    This section applies Independent Component Analysis (ICA) to the EEG data
-    for this subject. It reads the raw data, applies ICA to remove
-    artifacts, and generates a report with figures showing the timecourses of
-    the input and output data.
-
-    """
+    # applies ICA solution
 
     print(f"--- Applying ICA solution for {subject_id} ---")
     print(f"--- Removing ICA components: {ica_exclude_idx} ---")
