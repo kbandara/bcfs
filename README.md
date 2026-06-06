@@ -1,15 +1,15 @@
-## EEG analysis for a breaking continuous flash suppression (bCFS) dataset**
+## DCM analysis of breaking continuous flash suppression (bCFS)
 
 > ***Kav Bandara** University of Melbourne, 2025*
 
-This repo contains the complete analysis pipeline for an EEG study of conscious visual perception using the **breaking continuous flash suppression (bCFS)** paradigm [(McFadyen et al., 2022)](https://www.frontiersin.org/articles/10.3389/fnbeh.2022.797119/full).
+This repo contains the analysis pipeline for dynamic causal modelling (DCM) analysis of EEG data during breaking continuous flash suppression (bCFS) [(McFadyen et al., 2022)](https://www.frontiersin.org/articles/10.3389/fnbeh.2022.797119/full).
 
 ## Pipeline
 
 The analysis has four main steps:
 
 ### 1. EEG Preprocessing (`s01_prepro`)
-Preprocessing occurs in two sub-stages: automated ICA artefact rejection in MNE-Python (`s01_ica.py`), followed by the remainder of preprocessing in MATLAB (`s02_preprocessing.m`).
+Preprocessing occurs in two stages: automated ICA artefact rejection in MNE-Python (`s01_ica.py`), followed by the remainder of EEG preprocessing in MATLAB (`s02_preprocessing.m`).
 
 ### 2. Source Reconstruction and ROI Localisation (`s02_source_analysis`)
 
@@ -28,9 +28,9 @@ This stage also includes a comparison of the standard DCM input function (`spm_e
 
 ## Dependencies
 
-This analysis pipeline was run using MNE-Python, matlab, and SPM12. 
+This analysis pipeline was run using MNE-Python (v1.9), matlab (2024b), and SPM12. 
 
-SPM12 is freely available from the [Wellcome Centre for Human Neuroimaging](https://www.fil.ion.ucl.ac.uk/spm/software/spm12/).
+Both [MNE-Python](https://mne.tools/stable/install/index.html) and [SPM12](https://www.fil.ion.ucl.ac.uk/spm/software/spm12/) are freely available.
 
 ## HPC Usage & Parallel Processing
 
